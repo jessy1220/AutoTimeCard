@@ -29,28 +29,42 @@ def disconnectVPN():
   os.system("pulselauncher.exe -stop")
 
 def TimeCardIn(browser):
-  browser.get('http://inquire.insyde.com/custws/checkin.html?account=' + User_entry.get() + '&sys=timecard')
+  browser.get('https://eas2.insyde.com/ehrportal/LoginFOrginal.asp')
   wait = WebDriverWait(browser, 3)
-  submit = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="btnCheckI"]')))
-  try:
-    submit.click()
-  except:
-    try:
-      submit.click()
-    except:
-      pass
+  input = wait.until(EC.presence_of_element_located(
+      (By.XPATH, '//*[@name="username"]')))
+  input.send_keys(User_entry.get())
+  input = wait.until(EC.presence_of_element_located(
+      (By.XPATH, '//*[@name="password"]')))
+  input.send_keys(Pw_entry.get())
+  login = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@name="imageField"]')))
+  login.click()
+  browser.switch_to.window(browser.window_handles[-1])
+  browser.close()
+  browser.switch_to.window(browser.window_handles[0])
+  browser.get('https://eas2.insyde.com:443/ehrportal//DEPT/Personal_CardData_Default.asp')
+  browser.find_element_by_css_selector("input[name='radiobutton'][type='radio'][value='0']").click()
+  submit = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@name="Submit2"]')))
+  submit.click()
+  
 def TimeCardOut(browser):
-  browser.get('http://inquire.insyde.com/custws/checkin.html?account=' + User_entry.get() + '&sys=timecard')
+  browser.get('https://eas2.insyde.com/ehrportal/LoginFOrginal.asp')
   wait = WebDriverWait(browser, 3)
-  submit = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="btnCheckO"]')))
-  # submit.click()
-  try:
-    submit.click()
-  except:
-    try:
-      submit.click()
-    except:
-      pass
+  input = wait.until(EC.presence_of_element_located(
+      (By.XPATH, '//*[@name="username"]')))
+  input.send_keys(User_entry.get())
+  input = wait.until(EC.presence_of_element_located(
+      (By.XPATH, '//*[@name="password"]')))
+  input.send_keys(Pw_entry.get())
+  login = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@name="imageField"]')))
+  login.click()
+  browser.switch_to.window(browser.window_handles[-1])
+  browser.close()
+  browser.switch_to.window(browser.window_handles[0])
+  browser.get('https://eas2.insyde.com:443/ehrportal//DEPT/Personal_CardData_Default.asp')
+  browser.find_element_by_css_selector("input[name='radiobutton'][type='radio'][value='1']").click()
+  submit = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@name="Submit2"]')))
+  submit.click()
 
 def BrowserSetting():
   if BrowserIndex.get() == 1:
@@ -77,7 +91,7 @@ def TimeCardInProcess():
   TimeCardIn(browser)
   # browser.close()
   disconnectVPN()
-  TimerCardInList.pop()
+  TimerCardInList.pop(0)
   ScheduleTimeCardIn()
 
 def TimeCardOutProcess():
@@ -86,7 +100,7 @@ def TimeCardOutProcess():
   TimeCardOut(browser)
   # browser.close()
   disconnectVPN()
-  TimerCardOutList.pop()
+  TimerCardOutList.pop(0)
   ScheduleTimeCardOut()
 
 def ScheduleTimeCardIn():
@@ -244,7 +258,7 @@ if __name__ == "__main__":
   User_label.pack(side=tk.LEFT)
   User_label.configure(background='white')
   User_entry = tk.Entry(User, width=30)
-  User_entry.insert(0, os.getlogin())
+  # User_entry.insert(0, os.getlogin())
   User_entry.pack(side=tk.LEFT)
 
   Pw = tk.Frame(window)
