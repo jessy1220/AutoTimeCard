@@ -46,6 +46,7 @@ def TimeCardIn(browser):
   browser.find_element_by_css_selector("input[name='radiobutton'][type='radio'][value='0']").click()
   submit = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@name="Submit2"]')))
   submit.click()
+  time.sleep(3)
   
 def TimeCardOut(browser):
   browser.get('https://eas2.insyde.com/ehrportal/LoginFOrginal.asp')
@@ -65,6 +66,8 @@ def TimeCardOut(browser):
   browser.find_element_by_css_selector("input[name='radiobutton'][type='radio'][value='1']").click()
   submit = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@name="Submit2"]')))
   submit.click()
+  time.sleep(3)
+
 
 def BrowserSetting():
   if BrowserIndex.get() == 1:
@@ -269,34 +272,34 @@ if __name__ == "__main__":
   Pw_entry = tk.Entry(Pw, width=30, show='*')
   Pw_entry.pack(side=tk.LEFT)
 
-  time = tk.Frame(window)
-  time.pack(pady=10)
+  timeSetting = tk.Frame(window)
+  timeSetting.pack(pady=10)
   OnHourValidation = window.register(OnHourValidate)
   OnMinuteValidation = window.register(OnMinuteValidate)
   OffHourValidation = window.register(OffHourValidate)
   OffMinuteValidation = window.register(OffMinuteValidate)
 
-  On_label = tk.Label(time, text='on time:')
+  On_label = tk.Label(timeSetting, text='on time:')
   On_label.pack(side=tk.LEFT)
   On_label.configure(background='white')
-  On_hour_entry = tk.Entry(time, width=3, validate="key", validatecommand=(OnHourValidation, '%d', '%i', '%S'))
+  On_hour_entry = tk.Entry(timeSetting, width=3, validate="key", validatecommand=(OnHourValidation, '%d', '%i', '%S'))
   On_hour_entry.insert(0, '8')
   On_hour_entry.pack(side=tk.LEFT)
-  On_mark_label = tk.Label(time, text=':')
+  On_mark_label = tk.Label(timeSetting, text=':')
   On_mark_label.pack(side=tk.LEFT)
-  On_minute_entry = tk.Entry(time, width=3, validate="key", validatecommand=(OnMinuteValidation, '%d', '%i', '%S'))
+  On_minute_entry = tk.Entry(timeSetting, width=3, validate="key", validatecommand=(OnMinuteValidation, '%d', '%i', '%S'))
   On_minute_entry.insert(0, '30')
   On_minute_entry.pack(side=tk.LEFT)
 
-  Off_label = tk.Label(time, text='off time:')
+  Off_label = tk.Label(timeSetting, text='off time:')
   Off_label.pack(side=tk.LEFT)
   Off_label.configure(background='white')
-  Off_hour_entry = tk.Entry(time, width=3, validate="key", validatecommand=(OffHourValidation, '%d', '%i', '%S'))
+  Off_hour_entry = tk.Entry(timeSetting, width=3, validate="key", validatecommand=(OffHourValidation, '%d', '%i', '%S'))
   Off_hour_entry.insert(0, '18')
   Off_hour_entry.pack(side=tk.LEFT)
-  Off_mark_label = tk.Label(time, text=':')
+  Off_mark_label = tk.Label(timeSetting, text=':')
   Off_mark_label.pack(side=tk.LEFT)
-  Off_minute_entry = tk.Entry(time, width=3, validate="key", validatecommand=(OffMinuteValidation, '%d', '%i', '%S'))
+  Off_minute_entry = tk.Entry(timeSetting, width=3, validate="key", validatecommand=(OffMinuteValidation, '%d', '%i', '%S'))
   Off_minute_entry.insert(0, '00')
   Off_minute_entry.pack(side=tk.LEFT)
 
@@ -313,5 +316,7 @@ if __name__ == "__main__":
   TimeCard_start_button.place(x=90, y=170)
   TimeCard_end_button = tk.Button (window, text='Stop',command=StopProcess)
   TimeCard_end_button.place(x=180, y=170)
+
+  window.bind('<Return>', lambda event:Main())
 
   window.mainloop()
