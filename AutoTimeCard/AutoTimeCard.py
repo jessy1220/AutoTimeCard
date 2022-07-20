@@ -1,15 +1,32 @@
 from msilib.schema import RadioButton
 import os
-import tkinter as tk
+#import tkinter as tk
 import time
-from tkinter import messagebox
+#from tkinter import messagebox
 from datetime import datetime
 from datetime import timedelta
 from threading import Timer
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
+#from selenium import webdriver
+
+try:
+  import tkinter as tk
+  from tkinter import messagebox
+except ImportError:
+  print ("Trying to Install required module: tkinter\n")
+  os.system('py -3 -m pip install tkinter')
+  import tkinter as tk
+  from tkinter import messagebox
+
+try:
+  from selenium.webdriver.common.by import By
+  from selenium.webdriver.support import expected_conditions as EC
+  from selenium.webdriver.support.wait import WebDriverWait
+except ImportError:
+  print ("Trying to Install required module: selenium\n")
+  os.system('py -3 -m pip install selenium')
+  from selenium.webdriver.common.by import By
+  from selenium.webdriver.support import expected_conditions as EC
+  from selenium.webdriver.support.wait import WebDriverWait
 
 try:
   from msedge.selenium_tools import Edge, EdgeOptions
