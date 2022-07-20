@@ -4,6 +4,7 @@ import tkinter as tk
 import time
 from tkinter import messagebox
 from datetime import datetime
+from datetime import timedelta
 from threading import Timer
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -23,7 +24,7 @@ TimerCardOutList = list()
 
 def ConnectVPN():
   os.chdir("C:\\Program Files (x86)\\Common Files\\Pulse Secure\\Integration")
-  os.system("pulselauncher.exe -url https://vpn.insyde.com -u " + User_entry.get() + " -p " + Pw_entry.get() + " -r Insyde")
+  return os.system("pulselauncher.exe -url https://vpn.insyde.com -u " + User_entry.get() + " -p " + Pw_entry.get() + " -r Insyde")
 
 def disconnectVPN():
   os.system("pulselauncher.exe -stop")
@@ -108,9 +109,13 @@ def TimeCardOutProcess():
 
 def ScheduleTimeCardIn():
   x = datetime.today()
+  random = x.microsecond % 4
   y = x.replace(day=x.day, hour=int(On_hour_entry.get()), minute=int(On_minute_entry.get()), second=0, microsecond=0)
   if (y-x).total_seconds() < 0:
-    y = x.replace(day=x.day+1, hour=int(On_hour_entry.get()), minute=int(On_minute_entry.get()), second=0, microsecond=0)
+    y = y + timedelta(days=1)
+  y = y.replace(minute=int(On_minute_entry.get())+random)
+  print ('time card in at :')
+  print (y)
   delta_t=y-x
   secs=delta_t.total_seconds()
   t = Timer(secs, TimeCardInProcess)
@@ -119,9 +124,13 @@ def ScheduleTimeCardIn():
 
 def ScheduleTimeCardOut():
   x = datetime.today()
+  random = x.microsecond % 10
   y = x.replace(day=x.day, hour=int(Off_hour_entry.get()), minute=int(Off_minute_entry.get()), second=0, microsecond=0)
   if (y-x).total_seconds() < 0:
-    y = x.replace(day=x.day+1, hour=int(Off_hour_entry.get()), minute=int(Off_minute_entry.get()), second=0, microsecond=0)
+    y = y + timedelta(days=1)
+  y = y.replace(minute=int(Off_minute_entry.get())+random)
+  print ('time card out at :')
+  print (y)
   delta_t=y-x
   secs=delta_t.total_seconds()
   t = Timer(secs, TimeCardOutProcess)
@@ -170,9 +179,11 @@ def Main():
 
 def StopProcess():
   while len(TimerCardInList) != 0:
+    # print (TimerCardInList[0])
     TimerCardInList[0].cancel()
     TimerCardInList.pop(0)
   while len(TimerCardOutList) != 0:
+    # print (TimerCardOutList[0])
     TimerCardOutList[0].cancel()
     TimerCardOutList.pop(0)
   User_entry['state'] = 'normal'
@@ -249,6 +260,16 @@ def OffMinuteValidate(d, i, S):
   else:
     return True
 
+def ConnectTest():
+  result = ConnectVPN()
+  if result != 0:
+    print ( "Connect Fail!!\n UserName or Password may wrong.")
+    messagebox.showerror("Warning", "Connect Fail!!\n UserName or Password may wrong.")
+  else:
+    print ("Connect Success.")
+    messagebox.showinfo("Pass", "Connect Success.")
+    disconnectVPN()
+
 if __name__ == "__main__":
   window= tk.Tk() 
   window.title('TimeCard')
@@ -261,7 +282,7 @@ if __name__ == "__main__":
   User_label.pack(side=tk.LEFT)
   User_label.configure(background='white')
   User_entry = tk.Entry(User, width=30)
-  # User_entry.insert(0, os.getlogin())
+  User_entry.insert(0, os.getlogin())
   User_entry.pack(side=tk.LEFT)
 
   Pw = tk.Frame(window)
@@ -313,9 +334,11 @@ if __name__ == "__main__":
   BroweserSelect2.pack(side=tk.LEFT)
 
   TimeCard_start_button = tk.Button (window, text='Start',command=Main)
-  TimeCard_start_button.place(x=90, y=170)
+  TimeCard_start_button.place(x=50, y=170)
   TimeCard_end_button = tk.Button (window, text='Stop',command=StopProcess)
-  TimeCard_end_button.place(x=180, y=170)
+  TimeCard_end_button.place(x=130, y=170)
+  Connect_Test_button = tk.Button (window, text='Connect Test',command=ConnectTest)
+  Connect_Test_button.place(x=200, y=170)
 
   window.bind('<Return>', lambda event:Main())
 
