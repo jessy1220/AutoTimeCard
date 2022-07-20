@@ -4,3 +4,5 @@ Besides, if you want to install these module by Intel's wifi, please appends the
 For instance,
 Org: py -3 -m pip install msedge
 Mod: py -3 -m pip install msedge --proxy http://proxy-chain.intel.com:911
+
+How to using tool:
