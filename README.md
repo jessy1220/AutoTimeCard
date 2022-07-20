@@ -6,3 +6,14 @@ Org: py -3 -m pip install msedge
 Mod: py -3 -m pip install msedge --proxy http://proxy-chain.intel.com:911
 
 How to using tool:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
