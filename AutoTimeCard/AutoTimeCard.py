@@ -214,6 +214,7 @@ def StopProcess():
   BroweserSelect2['state'] = 'normal'
 
 def OnHourValidate(d, i, S):
+  #print("d,i,s",d,i,S)
   if not S.isdigit():
     return False
   if d == '0':
@@ -290,72 +291,110 @@ def ConnectTest():
 if __name__ == "__main__":
   window= tk.Tk() 
   window.title('TimeCard')
-  window.geometry("300x200")
+  window.geometry("300x250")
   window.configure(background='white')
+  window.resizable(0,0)  # Not allow window resizeable
 
   User = tk.Frame(window)
   User.pack(pady=10)
+
   User_label = tk.Label(User, text='User:        ')
   User_label.pack(side=tk.LEFT)
   User_label.configure(background='white')
+
   User_entry = tk.Entry(User, width=30)
   User_entry.insert(0, os.getlogin())
   User_entry.pack(side=tk.LEFT)
 
   Pw = tk.Frame(window)
   Pw.pack(pady=10)
+
   Pw_label = tk.Label(Pw, text='Password:')
   Pw_label.pack(side=tk.LEFT)
   Pw_label.configure(background='white')
+
   Pw_entry = tk.Entry(Pw, width=30, show='*')
   Pw_entry.pack(side=tk.LEFT)
 
   timeSetting = tk.Frame(window)
   timeSetting.pack(pady=10)
+
+  # Register a callback function
   OnHourValidation = window.register(OnHourValidate)
   OnMinuteValidation = window.register(OnMinuteValidate)
   OffHourValidation = window.register(OffHourValidate)
   OffMinuteValidation = window.register(OffMinuteValidate)
-
-  On_label = tk.Label(timeSetting, text='on time:')
+  
+  # Text label for on time
+  On_label = tk.Label(timeSetting, text='On time:')
   On_label.pack(side=tk.LEFT)
   On_label.configure(background='white')
+  
+  # Input entry for on time
   On_hour_entry = tk.Entry(timeSetting, width=3, validate="key", validatecommand=(OnHourValidation, '%d', '%i', '%S'))
   On_hour_entry.insert(0, '8')
   On_hour_entry.pack(side=tk.LEFT)
+  On_hour_entry.configure(background='white')
+
   On_mark_label = tk.Label(timeSetting, text=':')
   On_mark_label.pack(side=tk.LEFT)
+  On_mark_label.configure(background='white')
+
   On_minute_entry = tk.Entry(timeSetting, width=3, validate="key", validatecommand=(OnMinuteValidation, '%d', '%i', '%S'))
   On_minute_entry.insert(0, '30')
   On_minute_entry.pack(side=tk.LEFT)
+  On_minute_entry.configure(background='white')
 
-  Off_label = tk.Label(timeSetting, text='off time:')
-  Off_label.pack(side=tk.LEFT)
+  Off_label = tk.Label(timeSetting, text='Off time:')
+  Off_label.pack(side=tk.LEFT,padx=15)
   Off_label.configure(background='white')
+
   Off_hour_entry = tk.Entry(timeSetting, width=3, validate="key", validatecommand=(OffHourValidation, '%d', '%i', '%S'))
   Off_hour_entry.insert(0, '18')
   Off_hour_entry.pack(side=tk.LEFT)
+  Off_hour_entry.configure(background='white')
+
   Off_mark_label = tk.Label(timeSetting, text=':')
   Off_mark_label.pack(side=tk.LEFT)
+  Off_mark_label.configure(background='white')
+
   Off_minute_entry = tk.Entry(timeSetting, width=3, validate="key", validatecommand=(OffMinuteValidation, '%d', '%i', '%S'))
   Off_minute_entry.insert(0, '00')
   Off_minute_entry.pack(side=tk.LEFT)
+  Off_minute_entry.configure(background='white')
+
+  Browser_Lebal = tk.Label(window,text='Choice Browser')
+  Browser_Lebal.pack(pady=1)
+  Browser_Lebal.configure(background='white')
 
   RadioButton = tk.Frame(window)
-  RadioButton.pack(pady=10)
+  RadioButton.pack(pady=1)
+
   BrowserIndex = tk.IntVar()
   BrowserIndex.set(1)
+
   BroweserSelect1 = tk.Radiobutton(RadioButton, text='Chrome', background='white', variable=BrowserIndex, value=1)
   BroweserSelect1.pack(side=tk.LEFT)
+
   BroweserSelect2 = tk.Radiobutton(RadioButton, text='Edge', background='white', variable=BrowserIndex, value=2)
   BroweserSelect2.pack(side=tk.LEFT)
 
   TimeCard_start_button = tk.Button (window, text='Start',command=Main)
-  TimeCard_start_button.place(x=50, y=170)
+  TimeCard_start_button.place(x=50, y=180)
+
   TimeCard_end_button = tk.Button (window, text='Stop',command=StopProcess)
-  TimeCard_end_button.place(x=130, y=170)
+  TimeCard_end_button.place(x=130, y=180)
+
   Connect_Test_button = tk.Button (window, text='Connect Test',command=ConnectTest)
-  Connect_Test_button.place(x=200, y=170)
+  Connect_Test_button.place(x=200, y=180)
+
+  # Using Guid layout, Deprecated pack layout
+  #Rowr = 1 # Row numbers
+  #User_label.grid(row=Rowr, column=1)
+  #User_entry.grid(row=Rowr, column=2)
+  #Rowr += 1
+  #User_entry.grid(row=Rowr, column=1)
+  #User_entry.grid(row=Rowr, column=2)
 
   window.bind('<Return>', lambda event:Main())
 
